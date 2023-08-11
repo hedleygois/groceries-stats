@@ -1,0 +1,44 @@
+version: '3'
+
+services:
+#  groceries-be:
+#    build: .
+#    ports:
+#      - "8080:8080"
+#    networks:
+#      - postgres-network
+#    depends_on:
+#      database:
+#        condition: service_healthy
+
+  database:
+    image: 'postgres:latest'
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    networks:
+      - postgres-network
+    volumes:
+      - ./db-data/:/var/lib/postgresql/data/
+#      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+        test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+        interval: 1s
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 15433:80
+    env_file:
+      - .env
+    depends_on:
+      - database
+    networks:
+      - postgres-network
+    volumes:
+      - ./pgadmin-data/:/var/lib/pgadmin/
+
+networks:
+  postgres-network:
+    driver: bridge
