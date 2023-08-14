@@ -1,13 +1,14 @@
 package com.hedley.groceriesstats.franchises
 
 import org.springframework.stereotype.Service
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import java.math.BigInteger
 
 @Service
 class FranchiseService(val repository: FranchiseRepository) {
 
-    fun findByName(name: String): Mono<Franchise> {
+    fun findByName(name: String): Flux<Franchise> {
         return repository.findByNameContainingIgnoreCase(name)
     }
 
