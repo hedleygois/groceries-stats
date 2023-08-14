@@ -4,16 +4,19 @@ import com.hedley.groceriesstats.franchises.Franchise
 import io.r2dbc.spi.Readable
 import org.springframework.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Component
+import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import java.math.BigInteger
 
 @Component
+// Creating this because Spring Data R2JDBC STILL doesn't support relations... in 2023....
+// Think about the contracts of Repositories in the future. Should they use DTOs or Entities? This comes from the above-mentioned problem
 class SupermarketRepositoryImpl(
     private val databaseClient: DatabaseClient,
-    private val defaultSupermarketRepository: DefaultSupermarketRepository,
+    private val defaultSupermarketRepository: DefaultSupermarketRepository, // I shouldn't need this but I'm lazy
 ) : SupermarketRepository {
-    override fun findByNameWithFranchise(name: String): Mono<SupermarketDTO> {
+    override fun findByNameWithFranchise(name: String): Flux<SupermarketDTO> {
 //        val supermarket = databaseClient.sql("SELECT * FROM supermarkets WHERE name LIKE :name").bind("name", name).map { row ->
 //            val franchiseId = row.get("franchise_id", BigInteger::class.java) ?: BigInteger.ZERO
 //            val supermarketId = row.get("id", BigInteger::class.java)
@@ -58,7 +61,7 @@ class SupermarketRepositoryImpl(
             INNER JOIN franchises f ON f.id = s.franchise_id 
             WHERE s.name LIKE :name                
         """.trimIndent()
-        ).bind("name", name).map(::mapSupermarketSqlRowToSupermarketDTO).all().toMono()
+        ).bind("name", name).map(::mapSupermarketSqlRowToSupermarketDTO).all()
     }
 
 
