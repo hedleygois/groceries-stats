@@ -7,5 +7,5 @@ import java.math.BigInteger
 interface ItemRepository {
     fun findByNameWithFranchise(name: String): Flux<ItemDTO>
     fun findById(id: BigInteger): Mono<ItemDTO>
-    fun save(dto: SaveItemDTO): Mono<SimpleItemDTO>
+    fun save(dto: SaveItemDTO): Mono<SavedItemDTO>
 }

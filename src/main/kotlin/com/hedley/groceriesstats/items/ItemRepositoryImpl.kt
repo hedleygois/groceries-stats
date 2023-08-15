@@ -39,10 +39,10 @@ class ItemRepositoryImpl(
         """.trimIndent()
         ).bind("id", id).map(::mapItemSqlRowToItemDTO).all().toMono()
 
-    override fun save(dto: SaveItemDTO): Mono<SimpleItemDTO> =
+    override fun save(dto: SaveItemDTO): Mono<SavedItemDTO> =
         defaultItemRepository.save(Item(name = dto.name, brandId = dto.brandId, categoryId = dto.categoryId))
             .map { item ->
-                SimpleItemDTO(item = item)
+                SavedItemDTO(item = item)
             }
 
     private fun mapItemSqlRowToItemDTO(row: Readable): ItemDTO {
