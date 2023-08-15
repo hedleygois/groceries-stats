@@ -11,8 +11,8 @@ CREATE TABLE purchases (
             NOT VALID
 );
 
-ALTER TABLE IF EXISTS purchases
-    OWNER to postgres;
+--ALTER TABLE IF EXISTS purchases
+--    OWNER to postgres;
 
 CREATE TABLE items_purchase (
     id BIGSERIAL NOT NULL,
@@ -32,8 +32,8 @@ CREATE TABLE items_purchase (
             NOT VALID
 );
 
-ALTER TABLE IF EXISTS items_purchase
-    OWNER to postgres;
+--ALTER TABLE IF EXISTS items_purchase
+--    OWNER to postgres;
 
 
 

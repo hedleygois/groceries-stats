@@ -5,8 +5,8 @@ CREATE TABLE franchises
     PRIMARY KEY (id)
 );
 
-ALTER TABLE IF EXISTS franchises
-    OWNER to postgres;
+--ALTER TABLE IF EXISTS franchises
+--    OWNER to postgres;
 
 CREATE TABLE supermarkets
 (
@@ -21,8 +21,8 @@ CREATE TABLE supermarkets
         NOT VALID
 );
 
-ALTER TABLE IF EXISTS supermarkets
-    OWNER to postgres;
+--ALTER TABLE IF EXISTS supermarkets
+--    OWNER to postgres;
 
 CREATE TABLE items_category
 (
@@ -31,8 +31,8 @@ CREATE TABLE items_category
     PRIMARY KEY (id)
 );
 
-ALTER TABLE IF EXISTS items_category
-    OWNER to postgres;
+--ALTER TABLE IF EXISTS items_category
+--    OWNER to postgres;
 
 CREATE TABLE brands
 (
@@ -41,8 +41,8 @@ CREATE TABLE brands
     PRIMARY KEY (id)
 );
 
-ALTER TABLE IF EXISTS brands
-    OWNER to postgres;
+--ALTER TABLE IF EXISTS brands
+--    OWNER to postgres;
 
 CREATE TABLE items
 (
@@ -63,6 +63,6 @@ CREATE TABLE items
         NOT VALID
 );
 
-ALTER TABLE IF EXISTS items
-    OWNER to postgres;
+--ALTER TABLE IF EXISTS items
+--    OWNER to postgres;
 
