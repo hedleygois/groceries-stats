@@ -1,12 +1,13 @@
 package com.hedley.groceriesstats.itemcategory
 
-import com.hedley.groceriesstats.franchises.SaveFranchiseDTO
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.math.BigInteger
 
 @RestController
 @RequestMapping("/itemsCategory")
+@Tag(name = "Item Category API")
 class ItemCategoryController(private val service: ItemCategoryService) {
 
     @GetMapping("/byName/{name}")

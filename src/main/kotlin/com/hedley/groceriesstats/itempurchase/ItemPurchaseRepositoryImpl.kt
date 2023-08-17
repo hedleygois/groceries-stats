@@ -64,7 +64,7 @@ class ItemPurchaseRepositoryImpl(
             """.trimIndent()
         ).bind("purchaseId", purchaseId).map(::mapItemPurchaseSqlRowToItemPurchaseDTO).all()
 
-    override fun findByPurchases(purchasesIds: BigInteger): Flux<ItemPurchaseDTO> =
+    override fun findByPurchases(purchasesIds: List<BigInteger>): Flux<ItemPurchaseDTO> =
         databaseClient.sql(
             """
                 SELECT ip.id AS ip_id, ip.item_id AS ip_item_id, ip.value AS ip_value, ip.purchase_id AS ip_purchase_id,
@@ -83,7 +83,7 @@ class ItemPurchaseRepositoryImpl(
                 INNER JOIN franchises f ON f.id = s.franchise_id
                 WHERE p.id IN (:purchasesIds)
             """.trimIndent()
-        ).bind("purchaseId", purchasesIds).map(::mapItemPurchaseSqlRowToItemPurchaseDTO).all()
+        ).bind("purchasesIds", purchasesIds).map(::mapItemPurchaseSqlRowToItemPurchaseDTO).all()
 
 
     override fun create(dto: SaveItemPurchaseDTO): Mono<SavedItemPurchaseDTO> =

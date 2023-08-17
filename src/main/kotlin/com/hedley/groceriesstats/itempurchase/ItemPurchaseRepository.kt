@@ -7,6 +7,6 @@ import java.math.BigInteger
 interface ItemPurchaseRepository {
     fun findByItem(itemId: BigInteger): Flux<ItemPurchaseDTO>
     fun findByPurchase(purchaseId: BigInteger): Flux<ItemPurchaseDTO>
-    fun findByPurchases(purchasesIds: BigInteger): Flux<ItemPurchaseDTO>
+    fun findByPurchases(purchasesIds: List<BigInteger>): Flux<ItemPurchaseDTO>
     fun create(dto: SaveItemPurchaseDTO): Mono<SavedItemPurchaseDTO>
 }

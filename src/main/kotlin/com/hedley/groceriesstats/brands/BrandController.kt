@@ -1,11 +1,13 @@
 package com.hedley.groceriesstats.brands
 
+import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.math.BigInteger
 
 @RestController
 @RequestMapping("/brands")
+@Tag(name = "Brands API")
 class BrandController(val service: BrandService) {
 
     @GetMapping("/byName/{name}")
