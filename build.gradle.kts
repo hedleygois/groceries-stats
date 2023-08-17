@@ -6,6 +6,7 @@ plugins {
 	id("org.graalvm.buildtools.native") version "0.9.23"
 	kotlin("jvm") version "1.8.22"
 	kotlin("plugin.spring") version "1.8.22"
+	id("org.springdoc.openapi-gradle-plugin") version "1.7.0"
 }
 
 group = "com.hedley"
@@ -36,6 +37,7 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 //	implementation("org.springdoc:springdoc-openapi-starter-webflux-ui:2.1.0")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-api:2.1.0")
 	implementation("org.springdoc:springdoc-openapi-starter-common:2.1.0")
 //	implementation("org.springframework.boot:spring-boot-starter-oauth2-client")
 //	implementation("org.springframework.boot:spring-boot-starter-security")
