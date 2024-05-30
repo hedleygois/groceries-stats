@@ -8,6 +8,7 @@ import java.math.BigInteger
 @RestController
 @RequestMapping("/brands")
 @Tag(name = "Brands API")
+@CrossOrigin
 class BrandController(val service: BrandService) {
 
     @GetMapping("/byName/{name}")
@@ -24,5 +25,9 @@ class BrandController(val service: BrandService) {
     @ResponseStatus(HttpStatus.CREATED)
     fun save(@RequestBody dto: SaveBrandDTO) =
         service.save(dto)
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    fun list() = service.list()
 
 }

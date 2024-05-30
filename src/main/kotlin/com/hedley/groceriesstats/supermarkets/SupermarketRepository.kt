@@ -7,5 +7,7 @@ import java.math.BigInteger
 interface SupermarketRepository {
     fun findByNameWithFranchise(name: String): Flux<SupermarketDTO>
     fun findById(id: BigInteger): Mono<SupermarketDTO>
+
+    fun list(): Flux<SupermarketDTO>
     fun save(dto: SaveSupermarketDTO): Mono<SimpleSupermarketDTO>
 }

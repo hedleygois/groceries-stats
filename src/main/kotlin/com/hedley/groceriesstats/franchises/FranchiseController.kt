@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.parameters.RequestBody as OASRequestBody
 @RestController
 @RequestMapping("/franchises")
 @Tag(name = "Franchises API")
+@CrossOrigin
 class FranchiseController(val service: FranchiseService) {
 
     @GetMapping("/byName/{name}")
@@ -38,6 +39,22 @@ class FranchiseController(val service: FranchiseService) {
     )
     fun findByName(@PathVariable name: String) =
         service.findByName(name)
+
+    @GetMapping
+    @Operation(
+        summary = "Lists all franchises",
+        description = "Returns 200 if successful",
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                description = "Successful operation",
+                responseCode = "200"
+            ),
+        ]
+    )
+    fun list() =
+        service.list()
 
     @GetMapping("/{id}")
     @Operation(

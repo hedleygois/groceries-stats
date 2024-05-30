@@ -9,5 +9,7 @@ import java.math.BigInteger
 class SupermarketService(val repository: SupermarketRepository) {
     fun findByName(name: String): Flux<SupermarketDTO> = repository.findByNameWithFranchise(name)
     fun findById(id: BigInteger): Mono<SupermarketDTO> = repository.findById(id)
+
+    fun list(): Flux<SupermarketDTO> = repository.list()
     fun save(dto: SaveSupermarketDTO): Mono<SimpleSupermarketDTO> = repository.save(dto)
 }

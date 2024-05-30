@@ -16,6 +16,8 @@ class FranchiseService(val repository: FranchiseRepository) {
         return repository.findById(id)
     }
 
+    fun list(): Flux<Franchise> = repository.findAll()
+
     fun save(dto: SaveFranchiseDTO): Mono<Franchise> {
         return repository.save(Franchise(name = dto.name))
     }

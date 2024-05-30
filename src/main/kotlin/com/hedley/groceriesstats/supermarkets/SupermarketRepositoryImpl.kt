@@ -75,6 +75,16 @@ class SupermarketRepositoryImpl(
         """.trimIndent()
         ).bind("id", id).map(::mapSupermarketSqlRowToSupermarketDTO).all().toMono()
 
+    override fun list(): Flux<SupermarketDTO> =
+        databaseClient.sql(
+            """
+            SELECT s.id as s_id, s.name as s_name, f.id as f_id, f.name as f_name
+            FROM supermarkets s
+            INNER JOIN franchises f ON f.id = s.franchise_id
+        """.trimIndent()
+        ).map(::mapSupermarketSqlRowToSupermarketDTO).all()
+
+
     override fun save(dto: SaveSupermarketDTO): Mono<SimpleSupermarketDTO> =
         defaultSupermarketRepository.save(Supermarket(id = null, name = dto.name, franchiseId = dto.franchiseId))
             .map { supermarket ->

@@ -45,6 +45,16 @@ class ItemRepositoryImpl(
                 SavedItemDTO(item = item)
             }
 
+    override fun list(): Flux<ItemDTO> =
+        databaseClient.sql(
+            """
+            SELECT i.id as i_id, i.name as i_name, ic.id as ic_id, ic.name as ic_name, b.id as b_id, b.name as b_name 
+            FROM items i
+            INNER JOIN items_category ic ON ic.id = i.category_id
+            INNER JOIN brands b ON b.id = i.brand_id
+        """.trimIndent()
+        ).map(::mapItemSqlRowToItemDTO).all()
+
     private fun mapItemSqlRowToItemDTO(row: Readable): ItemDTO {
         val brand = Brand(
             id = row.get("b_id", BigInteger::class.java),

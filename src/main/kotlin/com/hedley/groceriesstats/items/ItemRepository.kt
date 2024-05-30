@@ -8,4 +8,6 @@ interface ItemRepository {
     fun findByNameWithFranchise(name: String): Flux<ItemDTO>
     fun findById(id: BigInteger): Mono<ItemDTO>
     fun save(dto: SaveItemDTO): Mono<SavedItemDTO>
+
+    fun list(): Flux<ItemDTO>
 }

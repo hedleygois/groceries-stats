@@ -20,4 +20,6 @@ class BrandService(val repository: BrandRepository) {
         return repository.save(Brand(name = dto.name))
     }
 
+    fun list(): Flux<Brand> = repository.findAll()
+
 }

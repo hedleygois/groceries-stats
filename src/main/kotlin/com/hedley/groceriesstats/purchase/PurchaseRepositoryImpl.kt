@@ -1,6 +1,7 @@
 package com.hedley.groceriesstats.purchase
 
 import com.hedley.groceriesstats.franchises.Franchise
+import com.hedley.groceriesstats.itempurchase.ItemPurchaseDTO
 import com.hedley.groceriesstats.itempurchase.ItemPurchaseRepository
 import com.hedley.groceriesstats.supermarkets.Supermarket
 import com.hedley.groceriesstats.supermarkets.SupermarketDTO
@@ -11,6 +12,7 @@ import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import reactor.kotlin.core.publisher.toMono
 import java.math.BigInteger
+import java.time.Duration
 
 @Service
 class PurchaseRepositoryImpl(
@@ -68,6 +70,32 @@ class PurchaseRepositoryImpl(
         ).map { purchase ->
             SavedPurchaseDTO(purchase = purchase)
         }.toMono()
+
+    override fun list(): Flux<PurchaseDTO> {
+        val purchasesDTO = databaseClient.sql(
+            """
+                SELECT p.id AS p_id, p.date AS p_date, p.supermarket_id AS p_supermarket_id,
+                s.id AS s_id, s.name AS s_name,
+                f.id AS f_id, f.name AS f_name
+                FROM purchase p
+                INNER JOIN supermarkets s ON s.id = p.supermarket.id
+                INNER JOIN franchises f ON f.id = s.franchise_id
+            """.trimIndent()
+        ).map(::mapPurchaseSqlRowToPurchaseDTO).all()
+
+        return purchasesDTO.map { dto ->
+            val items = itemPurchaseRepository.findByPurchase(dto.purchase.id ?: BigInteger.ZERO).map { items ->
+                items.item
+            }.collectList().block(Duration.ofMillis(100)) ?: emptyList()
+            dto.copy(items = items.map { item ->
+                ItemPurchaseDTO(
+                    item = item,
+                    purchase = dto,
+                    value = dto.purchase.totalValue
+                )
+            })
+        }
+    }
 
     private fun mapPurchaseSqlRowToPurchaseDTO(row: Readable): PurchaseDTO {
         val purchase = Purchase(

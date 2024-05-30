@@ -8,4 +8,6 @@ interface PurchaseRepository {
     fun findById(id: BigInteger): Mono<PurchaseDTO>
     fun findByDate(startDate: String, endDate: String): Flux<PurchaseDTO>
     fun create(dto: SavePurchaseDTO): Mono<SavedPurchaseDTO>
+
+    fun list(): Flux<PurchaseDTO>
 }
