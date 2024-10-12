@@ -1,5 +1,9 @@
 package com.hedley.groceriesstats.itemcategory
 
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.Parameter
+import io.swagger.v3.oas.annotations.responses.ApiResponse
+import io.swagger.v3.oas.annotations.responses.ApiResponses
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
@@ -29,4 +33,22 @@ class ItemCategoryController(private val service: ItemCategoryService) {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     fun list() = service.list()
+
+    @DeleteMapping("/{id}")
+    @Operation(
+        summary = "Delete a Item Category by id",
+        description = "Returns 200 if successful",
+        parameters = [
+            Parameter(name = "id", required = true, example = "1111")
+        ]
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                description = "Successful operation",
+                responseCode = "200"
+            ),
+        ]
+    )
+    fun delete(@PathVariable id: BigInteger) = service.delete(id)
 }

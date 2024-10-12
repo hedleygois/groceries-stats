@@ -22,4 +22,6 @@ class FranchiseService(val repository: FranchiseRepository) {
         return repository.save(Franchise(name = dto.name))
     }
 
+    fun delete(id: BigInteger): Mono<Void> = repository.deleteById(id)
+
 }

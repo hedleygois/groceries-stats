@@ -1,0 +1,1 @@
+ALTER TABLE items_category ADD COLUMN grams REAL;

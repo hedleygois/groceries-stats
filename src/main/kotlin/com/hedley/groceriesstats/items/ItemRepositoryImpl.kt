@@ -71,6 +71,6 @@ class ItemRepositoryImpl(
                 brandId = brand.id,
                 categoryId = category.id
             )
-        return ItemDTO(item = item, brand = brand, category = category)
+        return ItemDTO(id = item.id ?: BigInteger.ZERO, name = item.name, brand = brand, category = category)
     }
 }

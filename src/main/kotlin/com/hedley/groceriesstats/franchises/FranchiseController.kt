@@ -70,10 +70,6 @@ class FranchiseController(val service: FranchiseService) {
                 description = "Successful operation",
                 responseCode = "200"
             ),
-            ApiResponse(
-                description = "Used an invalid id",
-                responseCode = "403"
-            )
         ]
     )
     fun findById(@PathVariable id: BigInteger) =
@@ -108,5 +104,23 @@ class FranchiseController(val service: FranchiseService) {
         ) dto: SaveFranchiseDTO
     ) =
         service.save(dto)
+
+    @DeleteMapping("/{id}")
+    @Operation(
+        summary = "Delete a Franchise by id",
+        description = "Returns 200 if successful",
+        parameters = [
+            Parameter(name = "id", required = true, example = "1111")
+        ]
+    )
+    @ApiResponses(
+        value = [
+            ApiResponse(
+                description = "Successful operation",
+                responseCode = "200"
+            ),
+        ]
+    )
+    fun delete(@PathVariable id: BigInteger) = service.delete(id)
 
 }

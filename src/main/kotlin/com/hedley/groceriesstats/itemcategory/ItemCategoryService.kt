@@ -12,4 +12,6 @@ class ItemCategoryService(private val itemCategoryRepository: ItemCategoryReposi
     fun save(dto: SaveItemCategoryDTO): Mono<ItemCategory> =
         itemCategoryRepository.save(ItemCategory(id = null, name = dto.name))
     fun list(): Flux<ItemCategory> = itemCategoryRepository.findAll()
+
+    fun delete(id: BigInteger): Mono<Void> = itemCategoryRepository.deleteById(id)
 }

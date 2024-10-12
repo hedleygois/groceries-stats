@@ -8,7 +8,7 @@ import java.math.BigInteger
 @Table("items")
 data class Item(
     @Id val id: BigInteger? = null,
-    val name: String,
+    @Column("name") val name: String,
     @Column("category_id") val categoryId: BigInteger?,
     @Column("brand_id") val brandId: BigInteger?
 )

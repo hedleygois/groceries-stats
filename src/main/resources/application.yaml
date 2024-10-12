@@ -1,6 +1,9 @@
 logging:
     level:
+        root: INFO
         org.springframework.data.r2dbc: DEBUG
+        reactor: DEBUG
+        com.hedley.groceriesstats: DEBUG
 
 spring:
     flyway:
@@ -17,6 +20,7 @@ spring:
         properties:
             hibernate:
                 dialect: org.hibernate.dialect.PostgreSQLDialect
+            show-sql: true
         hibernate:
             ddl-auto: update
     sql:
