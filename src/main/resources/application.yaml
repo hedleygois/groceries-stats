@@ -6,6 +6,8 @@ logging:
         com.hedley.groceriesstats: DEBUG
 
 spring:
+    main:
+        web-application-type: reactive
     flyway:
         baseline-on-migrate: true
         url: jdbc:postgresql://localhost:5432/groceries
@@ -27,3 +29,9 @@ spring:
         init:
             mode: always
             platform: postgres
+springdoc:
+    api-docs:
+        enabled: true
+    swagger-ui:
+        path: /swagger-ui.html
+        enabled: true
