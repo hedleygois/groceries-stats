@@ -20,20 +20,26 @@ class PurchaseService(val repository: PurchaseRepository, val itemPurchaseServic
 
     @Transactional
     fun save(dto: SavePurchaseDTO): Mono<SavedPurchaseDTO> =
-        repository.create(dto).map { savedPurchaseDTO ->
-            Flux.concat(dto.items.map { itemCreation ->
+        repository.create(dto) // Save the purchase
+            .flatMap { savedPurchaseDTO ->
                 savedPurchaseDTO.purchase.id?.let { purchaseId ->
-                    itemPurchaseService.create(
-                        SaveItemPurchaseDTO(
-                            itemId = itemCreation.itemId,
-                            purchaseId = purchaseId,
-                            value = (itemCreation.value * itemCreation.quantity),
-                            grams = itemCreation.grams,
-                            quantity = itemCreation.quantity
-                        )
-                    )
-                }
-            })
-            savedPurchaseDTO
-        }
+                    // Create a Flux from the list of items and save each one after the purchase is saved
+                    val itemCreationFlux = Flux.fromIterable(dto.items)
+                        .flatMap { itemCreation ->
+                            itemPurchaseService.create(
+                                SaveItemPurchaseDTO(
+                                    itemId = itemCreation.itemId,
+                                    purchaseId = purchaseId,
+                                    value = itemCreation.value,
+                                    grams = itemCreation.grams,
+                                    quantity = itemCreation.quantity
+                                )
+                            )
+                        }
+
+                    // Ensure all item creations are completed before returning the saved purchase
+                    itemCreationFlux.then(Mono.just(savedPurchaseDTO))
+                } ?: Mono.error(IllegalStateException("Purchase ID is null"))
+            }
+
 }
