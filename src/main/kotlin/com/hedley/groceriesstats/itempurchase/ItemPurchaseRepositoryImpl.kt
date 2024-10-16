@@ -62,8 +62,8 @@ class ItemPurchaseRepositoryImpl(
                 INNER JOIN items_category ic ON ic.id = i.category_id
                 INNER JOIN brands b ON b.id = i.brand_id
                 INNER JOIN purchases p ON p.id = ip.purchase_id
-                INNER JOIN supermarkets s ON s.id = p.supermarket_id
                 INNER JOIN franchises f ON f.id = s.franchise_id
+                INNER JOIN supermarkets s ON s.id = p.supermarket_id
                 WHERE p.id = :purchaseId
             """.trimIndent()
         ).bind("purchaseId", purchaseId).map(::mapItemPurchaseSqlRowToItemPurchaseDTO).all()

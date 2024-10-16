@@ -111,6 +111,9 @@ class PurchaseRepositoryImpl(
         }
     }
 
+    override fun deleteAll(): Mono<Void> = defaultPurchaseRepository.deleteAll()
+
+
     private fun mapPurchaseSqlRowToPurchaseDTO(row: Readable): PurchaseDTO {
         val purchase = Purchase(
             id = row.get("p_id", BigInteger::class.java),

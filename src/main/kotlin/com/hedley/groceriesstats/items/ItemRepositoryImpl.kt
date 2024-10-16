@@ -15,14 +15,17 @@ class ItemRepositoryImpl(
     private val databaseClient: DatabaseClient,
     private val defaultItemRepository: DefaultItemRepository,
 ) : ItemRepository {
-    override fun findByNameWithFranchise(name: String): Flux<ItemDTO> {
+    override fun findByName(name: String): Flux<ItemDTO> {
         return databaseClient.sql(
             """
-            SELECT i.id as i_id, i.name as i_name, ic.id as ic_id, ic.name as ic_name, b.id as b_id, b.name as b_name 
+            SELECT 
+                i.id as i_id, i.name as i_name, 
+                ic.id as ic_id, ic.name as ic_name, 
+                b.id as b_id, b.name as b_name 
             FROM items i
             INNER JOIN items_category ic ON ic.id = i.category_id
             INNER JOIN brands b ON b.id = i.brand_id
-            WHERE s.name LIKE :name                
+            WHERE i.name LIKE :name                
         """.trimIndent()
         ).bind("name", name).map(::mapItemSqlRowToItemDTO).all()
     }

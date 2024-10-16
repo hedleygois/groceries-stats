@@ -9,7 +9,7 @@ import org.testcontainers.junit.jupiter.Container
 open class BaseIntegrationTest {
     companion object {
         @Container
-        val postgreSQLContainer: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:bullseye")
+        val postgreSQLContainer: PostgreSQLContainer<*> = PostgreSQLContainer("postgres:15")
             .withDatabaseName("integration-tests-db")
 
         @DynamicPropertySource
