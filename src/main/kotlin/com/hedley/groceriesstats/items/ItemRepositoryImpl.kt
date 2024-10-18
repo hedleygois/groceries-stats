@@ -19,9 +19,9 @@ class ItemRepositoryImpl(
         return databaseClient.sql(
             """
             SELECT 
-                i.id as i_id, i.name as i_name, 
-                ic.id as ic_id, ic.name as ic_name, 
-                b.id as b_id, b.name as b_name 
+                i.id AS i_id, i.name AS i_name, i.brand_id AS i_brand_id, i.category_id AS i_category_id,
+                ic.id AS ic_id, ic.name AS ic_name, 
+                b.id AS b_id, b.name AS b_name
             FROM items i
             INNER JOIN items_category ic ON ic.id = i.category_id
             INNER JOIN brands b ON b.id = i.brand_id
@@ -34,11 +34,14 @@ class ItemRepositoryImpl(
     override fun findById(id: BigInteger): Mono<ItemDTO> =
         databaseClient.sql(
             """
-            SELECT i.id as i_id, i.name as i_name, ic.id as ic_id, ic.name as ic_name, b.id as b_id, b.name as b_name 
+            SELECT 
+                i.id AS i_id, i.name AS i_name, i.brand_id AS i_brand_id, i.category_id AS i_category_id,
+                ic.id AS ic_id, ic.name AS ic_name, 
+                b.id AS b_id, b.name AS b_name 
             FROM items i
             INNER JOIN items_category ic ON ic.id = i.category_id
             INNER JOIN brands b ON b.id = i.brand_id
-            WHERE s.id = :id                
+            WHERE i.id = :id                
         """.trimIndent()
         ).bind("id", id).map(::mapItemSqlRowToItemDTO).all().toMono()
 
@@ -51,7 +54,10 @@ class ItemRepositoryImpl(
     override fun list(): Flux<ItemDTO> =
         databaseClient.sql(
             """
-            SELECT i.id as i_id, i.name as i_name, ic.id as ic_id, ic.name as ic_name, b.id as b_id, b.name as b_name 
+            SELECT 
+                i.id as i_id, i.name as i_name, i.brand_id AS i_brand_id, i.category_id AS i_category_id,
+                ic.id as ic_id, ic.name as ic_name, 
+                b.id as b_id, b.name as b_name 
             FROM items i
             INNER JOIN items_category ic ON ic.id = i.category_id
             INNER JOIN brands b ON b.id = i.brand_id

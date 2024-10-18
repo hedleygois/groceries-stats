@@ -62,8 +62,8 @@ class ItemPurchaseRepositoryImpl(
                 INNER JOIN items_category ic ON ic.id = i.category_id
                 INNER JOIN brands b ON b.id = i.brand_id
                 INNER JOIN purchases p ON p.id = ip.purchase_id
-                INNER JOIN franchises f ON f.id = s.franchise_id
                 INNER JOIN supermarkets s ON s.id = p.supermarket_id
+                INNER JOIN franchises f ON f.id = s.franchise_id
                 WHERE p.id = :purchaseId
             """.trimIndent()
         ).bind("purchaseId", purchaseId).map(::mapItemPurchaseSqlRowToItemPurchaseDTO).all()
@@ -141,16 +141,15 @@ class ItemPurchaseRepositoryImpl(
             id = row.get("ip_id", BigInteger::class.java),
             itemId = row.get("i_id", BigInteger::class.java) ?: BigInteger.ZERO,
             purchaseId = row.get("p_id", BigInteger::class.java) ?: BigInteger.ZERO,
-            value = row.get("ip_value", Float::class.java) ?: 0.0F,
-            grams = row.get("ip_grams", Float::class.java) ?: 0.0F,
-            quantity = row.get("ip_quantity", Int::class.java) ?: 0,
+            value = row.get("ip_value", String::class.java)?.toFloat() ?: 0.0F,
+            grams = row.get("ip_grams", String::class.java)?.toFloat() ?: 0.0F,
+            quantity = row.get("ip_quantity", String::class.java)?.toInt() ?: 0,
         )
         return ItemPurchaseDTO(
             item = ItemDTO(id = item.id ?: BigInteger.ZERO, name = item.name, brand = brand, category = category),
             purchase = PurchaseDTO(
                 purchase = purchase,
                 supermarket = SupermarketDTO(supermarket = supermarket, franchise = franchise),
-                items = emptyList() // it won't matter here
             ),
             value = itemPurchase.value
         )

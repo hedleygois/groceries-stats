@@ -1,6 +1,5 @@
 package com.hedley.groceriesstats.purchase
 
-import com.hedley.groceriesstats.itempurchase.ItemPurchaseDTO
 import com.hedley.groceriesstats.supermarkets.SupermarketDTO
 
-data class PurchaseDTO(val purchase: Purchase, val supermarket: SupermarketDTO, val items: List<ItemPurchaseDTO>)
+data class PurchaseDTO(val purchase: Purchase, val supermarket: SupermarketDTO)

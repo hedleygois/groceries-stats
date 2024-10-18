@@ -1,7 +1,6 @@
 package com.hedley.groceriesstats.purchase
 
 import com.hedley.groceriesstats.franchises.Franchise
-import com.hedley.groceriesstats.itempurchase.ItemPurchaseDTO
 import com.hedley.groceriesstats.itempurchase.ItemPurchaseRepository
 import com.hedley.groceriesstats.supermarkets.Supermarket
 import com.hedley.groceriesstats.supermarkets.SupermarketDTO
@@ -29,8 +28,8 @@ class PurchaseRepositoryImpl(
     }
 
 
-    override fun findById(id: BigInteger): Mono<PurchaseDTO> {
-        val purchaseDTO = databaseClient.sql(
+    override fun findById(id: BigInteger): Mono<PurchaseDTO> =
+        databaseClient.sql(
             """
                 SELECT p.id AS p_id, p.date AS p_date, p.supermarket_id AS p_supermarket_id, 
                 p.payment_types_id AS p_payment_types_id, p.totalvalue AS p_total_value,
@@ -41,17 +40,10 @@ class PurchaseRepositoryImpl(
                 INNER JOIN franchises f ON f.id = s.franchise_id
                 WHERE p.id = :purchaseId
             """.trimIndent()
-        ).bind("purchaseId", id).map(::mapPurchaseSqlRowToPurchaseDTO).all()
+        ).bind("purchaseId", id).map(::mapPurchaseSqlRowToPurchaseDTO).all().toMono()
 
-        return purchaseDTO.flatMap { dto ->
-            itemPurchaseRepository.findByPurchase(id).collectList().map { items ->
-                dto.copy(items = items)
-            }
-        }.toMono()
-    }
-
-    override fun findByDate(startDate: String, endDate: String): Flux<PurchaseDTO> {
-        val purchaseDTO = databaseClient.sql(
+    override fun findByDate(startDate: String, endDate: String): Flux<PurchaseDTO> =
+        databaseClient.sql(
             """
                 SELECT p.id AS p_id, p.date AS p_date, p.supermarket_id AS p_supermarket_id, 
                 p.payment_types_id AS p_payment_types_id, p.totalvalue AS p_total_value,
@@ -65,13 +57,6 @@ class PurchaseRepositoryImpl(
         ).bind("startDate", Instant.parse(startDate)).bind("endDate", Instant.parse(endDate))
             .map(::mapPurchaseSqlRowToPurchaseDTO).all()
 
-        return purchaseDTO.flatMap { dto ->
-            itemPurchaseRepository.findByPurchase(dto.purchase.id ?: BigInteger.ZERO).collectList().map { items ->
-                dto.copy(items = items)
-            }
-        }
-    }
-
     override fun create(dto: SavePurchaseDTO): Mono<SavedPurchaseDTO> =
         defaultPurchaseRepository.save(
             Purchase(
@@ -82,8 +67,8 @@ class PurchaseRepositoryImpl(
             )
         ).doOnError { error -> log.error(error.message) }.map { purchase -> SavedPurchaseDTO(purchase = purchase) }
 
-    override fun list(): Flux<PurchaseDTO> {
-        val purchasesDTO = databaseClient.sql(
+    override fun list(): Flux<PurchaseDTO> =
+        databaseClient.sql(
             """
                 SELECT p.id AS p_id, p.date AS p_date, p.supermarket_id AS p_supermarket_id, 
                 p.payment_types_id AS p_payment_types_id, p.totalvalue AS p_total_value,
@@ -95,21 +80,6 @@ class PurchaseRepositoryImpl(
                 INNER JOIN payment_types pt ON pt.id = p.payment_types_id
             """.trimIndent()
         ).map(::mapPurchaseSqlRowToPurchaseDTO).all()
-
-        return purchasesDTO.flatMap { dto ->
-            itemPurchaseRepository.findByPurchase(dto.purchase.id ?: BigInteger.ZERO).map { items ->
-                items.item
-            }.map { itemDTO ->
-                ItemPurchaseDTO(
-                    item = itemDTO,
-                    purchase = dto,
-                    value = dto.purchase.totalValue
-                )
-            }.collectList().map { itemsPurchase ->
-                dto.copy(items = itemsPurchase)
-            }
-        }
-    }
 
     override fun deleteAll(): Mono<Void> = defaultPurchaseRepository.deleteAll()
 
@@ -135,7 +105,6 @@ class PurchaseRepositoryImpl(
         return PurchaseDTO(
             purchase = purchase,
             supermarket = SupermarketDTO(supermarket = supermarket, franchise = franchise),
-            items = emptyList()
         )
     }
 }
