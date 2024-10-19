@@ -11,5 +11,5 @@ class SupermarketService(val repository: SupermarketRepository) {
     fun findById(id: BigInteger): Mono<SupermarketDTO> = repository.findById(id)
 
     fun list(): Flux<SupermarketDTO> = repository.list()
-    fun save(dto: SaveSupermarketDTO): Mono<SimpleSupermarketDTO> = repository.save(dto)
+    fun save(dto: SaveSupermarketDTO): Mono<SavedSupermarketDTO> = repository.save(dto)
 }

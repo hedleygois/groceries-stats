@@ -4,6 +4,7 @@ import com.hedley.groceriesstats.BaseIntegrationTest
 import com.hedley.groceriesstats.brands.Brand
 import com.hedley.groceriesstats.brands.BrandRepository
 import com.hedley.groceriesstats.franchises.Franchise
+import com.hedley.groceriesstats.franchises.FranchiseDTO
 import com.hedley.groceriesstats.franchises.FranchiseRepository
 import com.hedley.groceriesstats.itemcategory.ItemCategory
 import com.hedley.groceriesstats.itemcategory.ItemCategoryRepository
@@ -81,14 +82,14 @@ class PurchaseServiceTest : BaseIntegrationTest() {
                 date = now.toString(),
                 items = listOf(
                     ItemPurchaseCreation(
-                        itemId = firstItem!!.id,
+                        itemId = firstItem?.id!!,
                         itemName = firstItem.name,
                         value = 5.5F,
                         grams = 0.5F,
                         quantity = 1
                     ),
                     ItemPurchaseCreation(
-                        itemId = secondItem!!.id,
+                        itemId = secondItem?.id!!,
                         itemName = secondItem.name,
                         value = 5F,
                         grams = 10F,
@@ -111,7 +112,13 @@ class PurchaseServiceTest : BaseIntegrationTest() {
         )
         val purchaseDTO = PurchaseDTO(
             purchase = savedPurchase!!.purchase,
-            supermarket = SupermarketDTO(supermarket = supermarket!!.supermarket, franchise = franchise!!),
+            supermarket = SupermarketDTO(
+                id = supermarket?.id!!,
+                name = supermarket.name,
+                franchise = FranchiseDTO(
+                    id = franchise?.id!!, name = franchise.name
+                )
+            ),
         )
         Assertions.assertEquals(
             listOf(
@@ -125,7 +132,8 @@ class PurchaseServiceTest : BaseIntegrationTest() {
                     purchase = purchaseDTO,
                     value = 5.5F
                 )
-            ), itemPurchaseRepository.findByPurchase(BigInteger.ONE).collectList().block()
+            ),
+            itemPurchaseRepository.findByPurchase(BigInteger.ONE).collectList().block()
         )
     }
 

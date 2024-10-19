@@ -9,6 +9,6 @@ import java.math.BigInteger
 data class Item(
     @Id val id: BigInteger? = null,
     @Column("name") val name: String,
-    @Column("category_id") val categoryId: BigInteger?,
-    @Column("brand_id") val brandId: BigInteger?
+    @Column("category_id") val categoryId: BigInteger,
+    @Column("brand_id") val brandId: BigInteger
 )

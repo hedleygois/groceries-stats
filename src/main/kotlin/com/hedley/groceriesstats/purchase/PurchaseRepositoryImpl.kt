@@ -1,8 +1,7 @@
 package com.hedley.groceriesstats.purchase
 
-import com.hedley.groceriesstats.franchises.Franchise
+import com.hedley.groceriesstats.franchises.FranchiseDTO
 import com.hedley.groceriesstats.itempurchase.ItemPurchaseRepository
-import com.hedley.groceriesstats.supermarkets.Supermarket
 import com.hedley.groceriesstats.supermarkets.SupermarketDTO
 import io.r2dbc.spi.Readable
 import org.slf4j.LoggerFactory
@@ -93,18 +92,16 @@ class PurchaseRepositoryImpl(
             supermarketId = row.get("p_supermarket_id", BigInteger::class.java),
             paymentTypeId = row.get("p_payment_types_id", BigInteger::class.java),
         )
-        val supermarket = Supermarket(
-            id = row.get("s_id", BigInteger::class.java),
-            name = row.get("s_name", String::class.java) ?: "",
-            franchiseId = row.get("f_id", BigInteger::class.java)
-        )
-        val franchise = Franchise(
-            id = row.get("f_id", BigInteger::class.java),
-            name = row.get("f_name", String::class.java) ?: "",
-        )
         return PurchaseDTO(
             purchase = purchase,
-            supermarket = SupermarketDTO(supermarket = supermarket, franchise = franchise),
+            supermarket = SupermarketDTO(
+                id = row.get("s_id", BigInteger::class.java) ?: BigInteger.ZERO,
+                name = row.get("s_name", String::class.java) ?: "",
+                franchise = FranchiseDTO(
+                    id = row.get("f_id", BigInteger::class.java) ?: BigInteger.ZERO,
+                    name = row.get("f_name", String::class.java) ?: "",
+                )
+            ),
         )
     }
 }

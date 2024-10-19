@@ -1,10 +1,9 @@
 package com.hedley.groceriesstats.supermarkets
 
-import com.hedley.groceriesstats.franchises.FranchiseDTO
 import java.math.BigInteger
 
-data class SupermarketDTO(
+data class SavedSupermarketDTO(
     val id: BigInteger,
     val name: String,
-    val franchise: FranchiseDTO
+    val franchiseId: BigInteger,
 )

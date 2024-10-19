@@ -48,7 +48,12 @@ class ItemRepositoryImpl(
     override fun save(dto: SaveItemDTO): Mono<SavedItemDTO> =
         defaultItemRepository.save(Item(name = dto.name, brandId = dto.brandId, categoryId = dto.categoryId))
             .map { item ->
-                SavedItemDTO(item = item)
+                SavedItemDTO(
+                    id = item.id ?: BigInteger.ZERO,
+                    name = item.name,
+                    brandId = item.brandId,
+                    categoryId = item.categoryId
+                )
             }
 
     override fun list(): Flux<ItemDTO> =
@@ -77,8 +82,8 @@ class ItemRepositoryImpl(
             Item(
                 id = row.get("i_id", BigInteger::class.java),
                 name = row.get("i_name", String::class.java) ?: "",
-                brandId = brand.id,
-                categoryId = category.id
+                brandId = brand.id ?: BigInteger.ZERO,
+                categoryId = category.id ?: BigInteger.ZERO
             )
         return ItemDTO(id = item.id ?: BigInteger.ZERO, name = item.name, brand = brand, category = category)
     }

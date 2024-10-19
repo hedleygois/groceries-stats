@@ -1,13 +1,12 @@
 package com.hedley.groceriesstats.itempurchase
 
 import com.hedley.groceriesstats.brands.Brand
-import com.hedley.groceriesstats.franchises.Franchise
+import com.hedley.groceriesstats.franchises.FranchiseDTO
 import com.hedley.groceriesstats.itemcategory.ItemCategory
 import com.hedley.groceriesstats.items.Item
 import com.hedley.groceriesstats.items.ItemDTO
 import com.hedley.groceriesstats.purchase.Purchase
 import com.hedley.groceriesstats.purchase.PurchaseDTO
-import com.hedley.groceriesstats.supermarkets.Supermarket
 import com.hedley.groceriesstats.supermarkets.SupermarketDTO
 import io.r2dbc.spi.Readable
 import org.springframework.r2dbc.core.DatabaseClient
@@ -109,8 +108,8 @@ class ItemPurchaseRepositoryImpl(
         val item = Item(
             id = row.get("ip_item_id", BigInteger::class.java),
             name = row.get("i_name", String::class.java) ?: "",
-            categoryId = row.get("ic_id", BigInteger::class.java),
-            brandId = row.get("b_id", BigInteger::class.java)
+            categoryId = row.get("ic_id", BigInteger::class.java) ?: BigInteger.ZERO,
+            brandId = row.get("b_id", BigInteger::class.java) ?: BigInteger.ZERO
         )
         val brand = Brand(
             id = row.get("b_id", BigInteger::class.java),
@@ -128,15 +127,6 @@ class ItemPurchaseRepositoryImpl(
             supermarketId = row.get("p_supermarket_id", BigInteger::class.java),
             paymentTypeId = row.get("p_payment_types_id", BigInteger::class.java)
         )
-        val supermarket = Supermarket(
-            id = row.get("s_id", BigInteger::class.java),
-            name = row.get("s_name", String::class.java) ?: "",
-            franchiseId = row.get("f_id", BigInteger::class.java)
-        )
-        val franchise = Franchise(
-            id = row.get("f_id", BigInteger::class.java),
-            name = row.get("f_name", String::class.java) ?: "",
-        )
         val itemPurchase = ItemPurchase(
             id = row.get("ip_id", BigInteger::class.java),
             itemId = row.get("i_id", BigInteger::class.java) ?: BigInteger.ZERO,
@@ -149,7 +139,13 @@ class ItemPurchaseRepositoryImpl(
             item = ItemDTO(id = item.id ?: BigInteger.ZERO, name = item.name, brand = brand, category = category),
             purchase = PurchaseDTO(
                 purchase = purchase,
-                supermarket = SupermarketDTO(supermarket = supermarket, franchise = franchise),
+                supermarket = SupermarketDTO(
+                    id = row.get("s_id", BigInteger::class.java) ?: BigInteger.ZERO,
+                    name = row.get("s_name", String::class.java) ?: "", franchise = FranchiseDTO(
+                        id = row.get("f_id", BigInteger::class.java) ?: BigInteger.ZERO,
+                        name = row.get("f_name", String::class.java) ?: "",
+                    )
+                ),
             ),
             value = itemPurchase.value
         )
