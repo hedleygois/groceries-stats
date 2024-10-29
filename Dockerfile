@@ -14,7 +14,8 @@ COPY . .
 RUN gradle build --no-daemon -x test
 
 # Stage 2: Create the runtime image
-FROM eclipse-temurin:21-jre-alpine
+#FROM arm64v8/eclipse-temurin:17.0.9_9-jre-alpine
+FROM arm64v8/eclipse-temurin:21.0.5_11-jre-alpine
 
 WORKDIR /app
 
