@@ -11,6 +11,6 @@ data class Purchase(
     @Id val id: BigInteger? = null,
     val date: LocalDateTime,
     @Column("totalvalue") val totalValue: Float,
-    val supermarketId: BigInteger? = null,
-    @Column("payment_types_id") val paymentTypeId: BigInteger? = null
+    val supermarketId: BigInteger,
+    @Column("payment_types_id") val paymentTypeId: BigInteger
 )

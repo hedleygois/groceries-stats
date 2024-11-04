@@ -82,18 +82,15 @@ class PurchaseRepositoryImpl(
 
     override fun deleteAll(): Mono<Void> = defaultPurchaseRepository.deleteAll()
 
-
-    private fun mapPurchaseSqlRowToPurchaseDTO(row: Readable): PurchaseDTO {
-        val purchase = Purchase(
-            id = row.get("p_id", BigInteger::class.java),
+    // Note for the future me: This repository always returns a DTO instead of a model because these searches will always load the relations
+    // and I'm not using good ol' Hibernate
+    private fun mapPurchaseSqlRowToPurchaseDTO(row: Readable): PurchaseDTO =
+        PurchaseDTO(
+            id = row.get("p_id", BigInteger::class.java) ?: BigInteger.ZERO,
             date = row.get("p_date", LocalDateTime::class.java) ?: LocalDateTime.MIN,
             // for some reason decoding to float still throws an error on r2jdbc driver. let's convert to string and then to float
             totalValue = row.get("p_total_value", String::class.java)?.toFloat() ?: 0.0F,
-            supermarketId = row.get("p_supermarket_id", BigInteger::class.java),
-            paymentTypeId = row.get("p_payment_types_id", BigInteger::class.java),
-        )
-        return PurchaseDTO(
-            purchase = purchase,
+            paymentTypeId = row.get("p_payment_types_id", BigInteger::class.java) ?: BigInteger.ZERO,
             supermarket = SupermarketDTO(
                 id = row.get("s_id", BigInteger::class.java) ?: BigInteger.ZERO,
                 name = row.get("s_name", String::class.java) ?: "",
@@ -103,5 +100,4 @@ class PurchaseRepositoryImpl(
                 )
             ),
         )
-    }
 }

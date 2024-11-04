@@ -30,7 +30,7 @@ class PurchaseService(val repository: PurchaseRepository, val itemPurchaseServic
                                 SaveItemPurchaseDTO(
                                     itemId = itemCreation.itemId,
                                     purchaseId = purchaseId,
-                                    value = itemCreation.value,
+                                    value = itemCreation.quantity * itemCreation.value,
                                     grams = itemCreation.grams,
                                     quantity = itemCreation.quantity
                                 )

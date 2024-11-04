@@ -1,9 +1,9 @@
 logging:
     level:
         root: INFO
-        org.springframework.data.r2dbc: DEBUG
-        reactor: DEBUG
-        com.hedley.groceriesstats: DEBUG
+        org.springframework.data.r2dbc: INFO
+        reactor: INFO
+        com.hedley.groceriesstats: INFO
 
 spring:
     main:

@@ -86,7 +86,7 @@ class PurchaseServiceTest : BaseIntegrationTest() {
                         itemName = firstItem.name,
                         value = 5.5F,
                         grams = 0.5F,
-                        quantity = 1
+                        quantity = 2
                     ),
                     ItemPurchaseCreation(
                         itemId = secondItem?.id!!,
@@ -111,7 +111,10 @@ class PurchaseServiceTest : BaseIntegrationTest() {
             category = secondItem.category
         )
         val purchaseDTO = PurchaseDTO(
-            purchase = savedPurchase!!.purchase,
+            id = savedPurchase!!.purchase.id!!,
+            date = savedPurchase.purchase.date,
+            totalValue = savedPurchase.purchase.totalValue,
+            paymentTypeId = BigInteger.ONE,
             supermarket = SupermarketDTO(
                 id = supermarket?.id!!,
                 name = supermarket.name,
@@ -130,7 +133,7 @@ class PurchaseServiceTest : BaseIntegrationTest() {
                 ItemPurchaseDTO(
                     item = firstItemDTO,
                     purchase = purchaseDTO,
-                    value = 5.5F
+                    value = 11F
                 )
             ),
             itemPurchaseRepository.findByPurchase(BigInteger.ONE).collectList().block()
